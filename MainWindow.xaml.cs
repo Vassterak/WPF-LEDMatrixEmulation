@@ -116,40 +116,188 @@ namespace WPF_LEDMatrixMultiplexing
 
         private async void EmulatedAVRLoop(int delay)
         {
+            MessageBox.Show(inLoop ? "Loop is running" : "Loop was stopped");
+            //while (inLoop)
+            //{
+            //    LedInputEmulation(0b11100111, 0b01000000);
+            //    LedInputEmulation(0b01111111, 0b00000001);
+            //    await Task.Delay(delay);
+
+            //    LedInputEmulation(0b11000111, 0b01000000);
+            //    LedInputEmulation(0b10111111, 0b00000001);
+            //    await Task.Delay(delay);
+
+            //    LedInputEmulation(0b10000111, 0b01000000);
+            //    LedInputEmulation(0b11011111, 0b00000001);
+            //    await Task.Delay(delay);
+
+            //    LedInputEmulation(0b11100111, 0b01000000);
+            //    LedInputEmulation(0b11101111, 0b00000001);
+            //    await Task.Delay(delay);
+
+            //    LedInputEmulation(0b11100111, 0b01000000);
+            //    LedInputEmulation(0b11110111, 0b00000001);
+            //    await Task.Delay(delay);
+
+            //    LedInputEmulation(0b11100111, 0b01000000);
+            //    LedInputEmulation(0b11111011, 0b00000001);
+            //    await Task.Delay(delay);
+
+            //    LedInputEmulation(0b11100111, 0b01000000);
+            //    LedInputEmulation(0b11111101, 0b00000001);
+            //    await Task.Delay(delay);
+
+            //    LedInputEmulation(0b11100111, 0b01000000);
+            //    LedInputEmulation(0b11111110, 0b00000001);
+            //    await Task.Delay(delay);
+            //}
+
             while (inLoop)
             {
-                LedInputEmulation(0b11100111, 0b01000000);
-                LedInputEmulation(0b01111111, 0b00000001);
-                await Task.Delay(delay);
-
-                LedInputEmulation(0b11000111, 0b01000000);
-                LedInputEmulation(0b10111111, 0b00000001);
-                await Task.Delay(delay);
-
-                LedInputEmulation(0b10000111, 0b01000000);
-                LedInputEmulation(0b11011111, 0b00000001);
-                await Task.Delay(delay);
-
-                LedInputEmulation(0b11100111, 0b01000000);
-                LedInputEmulation(0b11101111, 0b00000001);
-                await Task.Delay(delay);
-
-                LedInputEmulation(0b11100111, 0b01000000);
-                LedInputEmulation(0b11110111, 0b00000001);
-                await Task.Delay(delay);
-
-                LedInputEmulation(0b11100111, 0b01000000);
-                LedInputEmulation(0b11111011, 0b00000001);
-                await Task.Delay(delay);
-
-                LedInputEmulation(0b11100111, 0b01000000);
-                LedInputEmulation(0b11111101, 0b00000001);
-                await Task.Delay(delay);
-
-                LedInputEmulation(0b11100111, 0b01000000);
-                LedInputEmulation(0b11111110, 0b00000001);
-                await Task.Delay(delay);
+                for (int i = 0; i < FontNumbers.fontZero.GetLength(0); i++)
+                {
+                    LedInputEmulation(FontNumbers.fontZero[i], 0b01000000);
+                    LedInputEmulation((0b10000000 >> i) ^ 0b11111111 , 0b00000001);
+                    await Task.Delay(delay);
+                }
             }
+
         }
+    }
+
+
+    static class FontNumbers
+    {
+        public static int[] fontZero = new int[]
+        {
+            0b11000011,
+            0b10011001,
+            0b10011001,
+            0b10011001,
+            0b10011001,
+            0b10011001,
+            0b10011001,
+            0b11000011
+        };
+
+        public static int[,] fontsdfZero = new int[,]
+{
+            {1,1,0,0,0,0,1,1},
+            {1,0,0,1,1,0,0,1},
+            {1,0,0,1,1,0,0,1},
+            {1,0,0,1,1,0,0,1},
+            {1,0,0,1,1,0,0,1},
+            {1,0,0,1,1,0,0,1},
+            {1,0,0,1,1,0,0,1},
+            {1,1,0,0,0,0,1,1}
+};
+
+        public static int[,] fontOne = new int[,]
+        {   
+            {1,1,1,0,0,1,1,1},
+            {1,1,0,0,0,1,1,1},
+            {1,0,0,0,0,1,1,1},
+            {1,1,1,0,0,1,1,1},
+            {1,1,1,0,0,1,1,1},
+            {1,1,1,0,0,1,1,1},
+            {1,1,1,0,0,1,1,1},
+            {1,1,1,0,0,1,1,1}
+        };
+
+        public static int[,] fontTwo = new int[,]
+        {   
+            {1,1,1,0,0,1,1,1},
+            {1,1,0,0,0,0,1,1},
+            {1,0,0,1,1,0,0,1},
+            {1,1,1,1,1,0,0,1},
+            {1,1,1,1,0,0,1,1},
+            {1,1,1,0,0,1,1,1},
+            {1,1,0,0,1,1,1,1},
+            {1,0,0,0,0,0,0,1}
+        };
+
+        public static int[,] fontThree = new int[,]
+        { 
+            {1,1,0,0,0,0,1,1},
+            {1,0,0,1,1,0,0,1},
+            {1,1,1,1,1,0,0,1},
+            {1,1,1,0,0,0,1,1},
+            {1,1,1,0,0,0,1,1},
+            {1,1,1,1,1,0,0,1},
+            {1,0,0,1,1,0,0,1},
+            {1,1,0,0,0,0,1,1}
+        };
+
+        public static int[,] fontFour = new int[,]
+        {  
+            {1,1,1,1,0,0,0,1},
+            {1,1,1,0,0,0,0,1},
+            {1,1,0,0,1,0,0,1},
+            {1,0,0,1,1,0,0,1},
+            {0,0,1,1,1,0,0,1},
+            {0,0,0,0,0,0,0,0},
+            {1,1,1,1,1,0,0,1},
+            {1,1,1,1,1,0,0,1}
+        };
+
+        public static int[,] fontFive = new int[,]
+        {  
+            {1,1,0,0,0,0,0,1},
+            {1,0,0,0,0,0,0,1},
+            {1,0,0,1,1,1,1,1},
+            {1,0,0,0,0,0,1,1},
+            {1,0,0,0,0,0,0,1},
+            {1,1,1,1,1,0,0,1},
+            {1,0,0,0,0,0,0,1},
+            {1,1,0,0,0,0,1,1}
+        };
+
+        public static int[,] fontSix = new int[,]
+        {   
+            {1,1,1,0,0,0,1,1},
+            {1,1,0,0,0,0,0,1},
+            {1,0,0,1,1,1,1,1},
+            {1,0,0,0,0,0,1,1},
+            {1,0,0,1,1,0,0,1},
+            {1,0,0,1,1,0,0,1},
+            {1,0,0,1,1,0,0,1},
+            {1,1,0,0,0,0,1,1}
+        };
+
+        public static int[,] fontSeven = new int[,]
+        {   
+            {1,1,0,0,0,0,1,1},
+            {1,0,0,0,0,0,0,1},
+            {1,1,1,1,1,0,0,1},
+            {1,1,1,1,1,0,0,1},
+            {1,1,1,1,0,0,1,1},
+            {1,1,1,0,0,1,1,1},
+            {1,1,0,0,1,1,1,1},
+            {1,1,0,0,1,1,1,1}
+        };
+
+        public static int[,] fontEight = new int[,]
+        { 
+            {1,1,0,0,0,0,1,1},
+            {1,0,0,1,1,0,0,1},
+            {1,0,0,1,1,0,0,1},
+            {1,1,0,0,0,0,1,1},
+            {1,1,0,0,0,0,1,1},
+            {1,0,0,1,1,0,0,1},
+            {1,0,0,1,1,0,0,1},
+            {1,1,0,0,0,0,1,1}
+        };
+
+        public static int[,] fontNine = new int[,]
+        {   
+            {1,1,0,0,0,0,1,1},
+            {1,0,0,1,1,0,0,1},
+            {1,0,0,1,1,0,0,1},
+            {1,0,0,1,1,0,0,1},
+            {1,1,0,0,0,0,0,1},
+            {1,1,1,1,1,0,0,1},
+            {1,1,1,1,0,0,1,1},
+            {1,1,0,0,0,1,1,1}
+        };
     }
 }
