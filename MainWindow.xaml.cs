@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -23,6 +24,7 @@ namespace WPF_LEDMatrixMultiplexing
     {
         bool[] dataLedArrayY;
         bool[] dataLedArrayX;
+        bool inLoop = false;
 
         public MainWindow()
         {
@@ -108,37 +110,46 @@ namespace WPF_LEDMatrixMultiplexing
 
         private void testButton_Click(object sender, RoutedEventArgs e) //Input your data code here!
         {
-            LedInputEmulation(0b11100111, 0b01000000);
-            LedInputEmulation(0b01111111, 0b00000001);
-            MessageBox.Show("");
+            inLoop = !inLoop;
+            EmulatedAVRLoop(int.Parse(delayTextBox.Text));
+        }
 
-            LedInputEmulation(0b11000111, 0b01000000);
-            LedInputEmulation(0b10111111, 0b00000001);
-            MessageBox.Show("");
+        private async void EmulatedAVRLoop(int delay)
+        {
+            while (inLoop)
+            {
+                LedInputEmulation(0b11100111, 0b01000000);
+                LedInputEmulation(0b01111111, 0b00000001);
+                await Task.Delay(delay);
 
-            LedInputEmulation(0b10000111, 0b01000000);
-            LedInputEmulation(0b11011111, 0b00000001);
-            MessageBox.Show("");
+                LedInputEmulation(0b11000111, 0b01000000);
+                LedInputEmulation(0b10111111, 0b00000001);
+                await Task.Delay(delay);
 
-            LedInputEmulation(0b11100111, 0b01000000);
-            LedInputEmulation(0b11101111, 0b00000001);
-            MessageBox.Show("");
+                LedInputEmulation(0b10000111, 0b01000000);
+                LedInputEmulation(0b11011111, 0b00000001);
+                await Task.Delay(delay);
 
-            LedInputEmulation(0b11100111, 0b01000000);
-            LedInputEmulation(0b11110111, 0b00000001);
-            MessageBox.Show("");
+                LedInputEmulation(0b11100111, 0b01000000);
+                LedInputEmulation(0b11101111, 0b00000001);
+                await Task.Delay(delay);
 
-            LedInputEmulation(0b11100111, 0b01000000);
-            LedInputEmulation(0b11111011, 0b00000001);
-            MessageBox.Show("");
+                LedInputEmulation(0b11100111, 0b01000000);
+                LedInputEmulation(0b11110111, 0b00000001);
+                await Task.Delay(delay);
 
-            LedInputEmulation(0b11100111, 0b01000000);
-            LedInputEmulation(0b11111101, 0b00000001);
-            MessageBox.Show("");
+                LedInputEmulation(0b11100111, 0b01000000);
+                LedInputEmulation(0b11111011, 0b00000001);
+                await Task.Delay(delay);
 
-            LedInputEmulation(0b11100111, 0b01000000);
-            LedInputEmulation(0b11111110, 0b00000001);
-            MessageBox.Show("");
+                LedInputEmulation(0b11100111, 0b01000000);
+                LedInputEmulation(0b11111101, 0b00000001);
+                await Task.Delay(delay);
+
+                LedInputEmulation(0b11100111, 0b01000000);
+                LedInputEmulation(0b11111110, 0b00000001);
+                await Task.Delay(delay);
+            }
         }
     }
 }
