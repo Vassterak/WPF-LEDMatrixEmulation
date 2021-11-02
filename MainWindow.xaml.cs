@@ -22,48 +22,67 @@ namespace WPF_LEDMatrixMultiplexing
 
     public partial class MainWindow : Window
     {
-        bool[] dataLedArrayY;
-        bool[] dataLedArrayX;
+        bool[] dataLedArrayY1;
+        bool[] dataLedArrayX1;
+        bool[] dataLedArrayY2;
+        bool[] dataLedArrayX2;
         bool inLoop = false;
 
         public MainWindow()
         {
             InitializeComponent();
-            dataLedArrayY = new bool[ledArray.ColumnDefinitions.Count];
-            dataLedArrayX = new bool[ledArray.RowDefinitions.Count];
+            dataLedArrayY1 = new bool[ledArray1.ColumnDefinitions.Count];
+            dataLedArrayX1 = new bool[ledArray1.RowDefinitions.Count];
+            dataLedArrayY2 = new bool[ledArray2.ColumnDefinitions.Count];
+            dataLedArrayX2 = new bool[ledArray2.RowDefinitions.Count];
             InitialLedUIRender();
         }
 
         void InitialLedUIRender()
         {
-            for (int y = 0; y < ledArray.RowDefinitions.Count; y++)
+            for (int y = 0; y < ledArray1.RowDefinitions.Count; y++)
             {
-                for (int x = 0; x < ledArray.ColumnDefinitions.Count; x++)
+                for (int x = 0; x < ledArray1.ColumnDefinitions.Count; x++)
                 {
-                    Ellipse newEllipse = new Ellipse { Fill = Brushes.Gray };
-                    newEllipse.SetValue(Grid.RowProperty, y);
-                    newEllipse.SetValue(Grid.ColumnProperty, x);
-                    ledArray.Children.Add(newEllipse);
+                    Ellipse newEllipse1 = new Ellipse { Fill = Brushes.Gray };
+                    newEllipse1.SetValue(Grid.RowProperty, y);
+                    newEllipse1.SetValue(Grid.ColumnProperty, x);
+                    ledArray1.Children.Add(newEllipse1);
+
+                    Ellipse newEllipse2 = new Ellipse { Fill = Brushes.Gray };
+                    newEllipse2.SetValue(Grid.RowProperty, y);
+                    newEllipse2.SetValue(Grid.ColumnProperty, x);
+                    ledArray2.Children.Add(newEllipse2);
                 }
             }
         }
 
         void LedInputEmulation(int data, int registerID)
         {
-            if (registerID == 0b00000001) //C1 register
+            if (((registerID & (1 << 0)) >> 0) == 1) //C1 register
             {
-                for (int i = 0; i < ledArray.RowDefinitions.Count; i++)
+                for (int i = 0; i < ledArray1.RowDefinitions.Count; i++)
                 {
-                    dataLedArrayY[ledArray.RowDefinitions.Count - 1 - i] = !Convert.ToBoolean((data >> i) & 1);
+                    dataLedArrayY1[ledArray1.RowDefinitions.Count - 1 - i] = !Convert.ToBoolean((data >> i) & 1);
                 }
 
             }
 
-            else if (registerID == 0b01000000) //C7 register
+            if (((registerID & (1 << 1)) >> 1) == 1) //C2 register
             {
-                for (int i = 0; i < ledArray.ColumnDefinitions.Count; i++)
+                for (int i = 0; i < ledArray2.RowDefinitions.Count; i++)
                 {
-                    dataLedArrayX[ledArray.ColumnDefinitions.Count - 1 - i] = !Convert.ToBoolean((data >> i) & 1);
+                    dataLedArrayY2[ledArray2.RowDefinitions.Count - 1 - i] = !Convert.ToBoolean((data >> i) & 1);
+                }
+
+            }
+
+            if (((registerID & (1 << 6)) >> 6) == 1) //C7 register
+            {
+                for (int i = 0; i < ledArray1.ColumnDefinitions.Count; i++)
+                {
+                    dataLedArrayX1[ledArray1.ColumnDefinitions.Count - 1 - i] = !Convert.ToBoolean((data >> i) & 1);
+                    dataLedArrayX2[ledArray2.ColumnDefinitions.Count - 1 - i] = !Convert.ToBoolean((data >> i) & 1);
                 }
             }
             UpdateLedIU();
@@ -71,18 +90,29 @@ namespace WPF_LEDMatrixMultiplexing
         
         void UpdateLedIU()
         {
-            for (int y = 0; y < ledArray.RowDefinitions.Count; y++)
+            for (int y = 0; y < ledArray1.RowDefinitions.Count; y++)
             {
-                for (int x = 0; x < ledArray.ColumnDefinitions.Count; x++)
+                for (int x = 0; x < ledArray1.ColumnDefinitions.Count; x++)
                 {
-                    if (dataLedArrayY[y] && dataLedArrayX[x])
+                    if (dataLedArrayY1[y] && dataLedArrayX1[x])
                     {
-                        Ellipse targetLED = ledArray.Children.Cast<Ellipse>().First(value => Grid.GetRow(value) == y && Grid.GetColumn(value) == x);
+                        Ellipse targetLED = ledArray1.Children.Cast<Ellipse>().First(value => Grid.GetRow(value) == y && Grid.GetColumn(value) == x);
                         targetLED.Fill = Brushes.Green;
                     }
                     else
                     {
-                        Ellipse targetLED = ledArray.Children.Cast<Ellipse>().First(value => Grid.GetRow(value) == y && Grid.GetColumn(value) == x);
+                        Ellipse targetLED = ledArray1.Children.Cast<Ellipse>().First(value => Grid.GetRow(value) == y && Grid.GetColumn(value) == x);
+                        targetLED.Fill = Brushes.Gray;
+                    }
+
+                    if (dataLedArrayY2[y] && dataLedArrayX2[x])
+                    {
+                        Ellipse targetLED = ledArray2.Children.Cast<Ellipse>().First(value => Grid.GetRow(value) == y && Grid.GetColumn(value) == x);
+                        targetLED.Fill = Brushes.Green;
+                    }
+                    else
+                    {
+                        Ellipse targetLED = ledArray2.Children.Cast<Ellipse>().First(value => Grid.GetRow(value) == y && Grid.GetColumn(value) == x);
                         targetLED.Fill = Brushes.Gray;
                     }
                 }
@@ -93,11 +123,11 @@ namespace WPF_LEDMatrixMultiplexing
         void DebugPrintArray()
         {
             string output = "";
-            for (int y = 0; y < ledArray.RowDefinitions.Count; y++)
+            for (int y = 0; y < ledArray1.RowDefinitions.Count; y++)
             {
-                for (int x = 0; x < ledArray.ColumnDefinitions.Count; x++)
+                for (int x = 0; x < ledArray1.ColumnDefinitions.Count; x++)
                 {
-                    output += $"{y}_{x}: " + dataLedArrayY[y] + " " + dataLedArrayX[x] + "\n";
+                    output += $"{y}_{x}: " + dataLedArrayY1[y] + " " + dataLedArrayX1[x] + "\n";
                 }
             }
             MessageBox.Show(output);
@@ -156,8 +186,8 @@ namespace WPF_LEDMatrixMultiplexing
             {
                 for (int i = 0; i < FontNumbers.fontZero.GetLength(0); i++)
                 {
-                    LedInputEmulation(FontNumbers.fontZero[i], 0b01000000);
-                    LedInputEmulation((0b10000000 >> i) ^ 0b11111111 , 0b00000001);
+                    LedInputEmulation(FontNumbers.fontZero[i], 0b01000001);
+                    LedInputEmulation((0b10000000 >> i) ^ 0b11111111 , 0b01000000);
                     await Task.Delay(delay);
                 }
             }

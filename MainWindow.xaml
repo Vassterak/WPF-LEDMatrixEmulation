@@ -5,13 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPF_LEDMatrixMultiplexing"
         mc:Ignorable="d"
-        Title="MainWindow" Height="475" Width="450">
+        Title="MainWindow" Height="475" Width="900">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="25"/>
         </Grid.RowDefinitions>
-        <Grid x:Name="ledArray" Margin="5" Grid.Row="0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid x:Name="ledArray1" Margin="5" Grid.Row="0" Grid.Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
@@ -33,9 +37,31 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
         </Grid>
-        <Button x:Name="debugButton" Content="Debug info" Width="80" VerticalAlignment="Center" Grid.Row="2" HorizontalAlignment="Left" Margin="20,0" Click="debugButton_Click"/>
-        <Label Content="delay in ms: " HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1"/>
-        <TextBox x:Name="delayTextBox" HorizontalAlignment="Center" Grid.Row="1" Text="100" TextWrapping="Wrap" VerticalAlignment="Center" Margin="150,0,0,0" Width="80"/>
-        <Button x:Name="testButton" Content="Test button" Grid.Row="2" HorizontalAlignment="Right" Width="80" Margin="20,0" VerticalAlignment="Center" Click="testButton_Click"/>
+        <Grid x:Name="ledArray2" Margin="5" Grid.Row="0" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+        </Grid>
+        <Button x:Name="debugButton" Content="Debug info" Width="80" VerticalAlignment="Center" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" Margin="20,0" Click="debugButton_Click"/>
+        <Label Content="delay in ms: " HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Grid.Row="1"/>
+        <TextBox x:Name="delayTextBox" HorizontalAlignment="Center" Grid.Row="1" Grid.Column="1" Text="100" TextWrapping="Wrap" VerticalAlignment="Center" Margin="150,0,0,0" Width="80"/>
+        <Button x:Name="testButton" Content="Test button" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Width="80" Margin="20,0" VerticalAlignment="Center" Click="testButton_Click"/>
     </Grid>
 </Window>
